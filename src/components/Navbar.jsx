@@ -15,7 +15,11 @@ function Navbar() {
   return (
     <header className="sticky top-0 z-50 border-b bg-background/90 backdrop-blur-xl">
       <nav className="mx-auto flex h-18 max-w-7xl items-center justify-between px-6">
-        <Link to="/" className="flex items-center gap-3">
+        {/* Logo */}
+        <Link
+          to="/"
+          className="flex items-center gap-3"
+        >
           <div className="flex size-10 items-center justify-center rounded-full bg-primary text-primary-foreground">
             <Compass className="size-5" />
           </div>
@@ -25,6 +29,7 @@ function Navbar() {
           </span>
         </Link>
 
+        {/* Navigation */}
         <div className="hidden items-center gap-8 md:flex">
           {navItems.map((item) => (
             <NavLink
@@ -43,9 +48,23 @@ function Navbar() {
           ))}
         </div>
 
-        <Button asChild>
-          <Link to="/sign-in">Start Exploring</Link>
-        </Button>
+        {/* Actions */}
+        <div className="flex items-center gap-3">
+          {/* Admin */}
+          <Link
+            to="/admin"
+            className="hidden text-sm font-medium text-muted-foreground transition-colors hover:text-primary sm:block"
+          >
+            Admin
+          </Link>
+
+          {/* Start Exploring */}
+          <Button asChild>
+            <Link to="/sign-in">
+              Start Exploring
+            </Link>
+          </Button>
+        </div>
       </nav>
     </header>
   );
