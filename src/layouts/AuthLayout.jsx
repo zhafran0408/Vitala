@@ -1,14 +1,25 @@
 import { ArrowLeft, Compass } from "lucide-react";
-import { Link, Outlet, useLocation } from "react-router-dom";
+import { Link, Navigate, Outlet, useLocation } from "react-router-dom";
+
+import { UsuAuthStore } from "../store/userStore";
 
 function AuthLayout() {
   const location = useLocation();
 
+  const user = UsuAuthStore((state) => state.user);
+
+ 
+  if (user) {
+    if (user.role === "admin") {
+      return <Navigate to="/admin" replace />;
+    }
+
+    return <Navigate to="/" replace />;
+  }
+
   const isSignUp = location.pathname === "/sign-up";
 
-  const image = isSignUp
-    ? "/images/image5.jpg"
-    : "/images/image4.jpg";
+  const image = isSignUp ? "/image/image5.jpg" : "/image/image6.jpg";
 
   const title = isSignUp
     ? "Start your journey."
@@ -21,8 +32,7 @@ function AuthLayout() {
   return (
     <div className="min-h-screen bg-background">
       <div className="grid min-h-screen lg:grid-cols-2">
-
-        {/* LEFT - IMAGE */}
+        {/* IMAGE */}
         <div className="relative hidden overflow-hidden lg:block">
           <img
             src={image}
@@ -30,12 +40,10 @@ function AuthLayout() {
             className="absolute inset-0 h-full w-full object-cover"
           />
 
-          {/* Overlay */}
           <div className="absolute inset-0 bg-black/45" />
 
           <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-black/30" />
 
-          {/* Logo */}
           <Link
             to="/"
             className="absolute left-10 top-10 z-10 flex items-center gap-3 text-white"
@@ -49,7 +57,6 @@ function AuthLayout() {
             </span>
           </Link>
 
-          {/* Text */}
           <div className="absolute bottom-12 left-10 right-10 z-10 text-white">
             <p className="mb-5 text-xs font-semibold uppercase tracking-[0.3em] text-white/60">
               Vitala
@@ -68,30 +75,10 @@ function AuthLayout() {
               Explore more. Live more.
             </div>
           </div>
-
-          
         </div>
 
-        {/* RIGHT - FORM */}
+        {/* FORM */}
         <div className="relative flex min-h-screen items-center justify-center p-6 sm:p-10">
-
-          {/* Mobile Logo */}
-          <div className="absolute left-6 top-6 lg:hidden">
-            <Link
-              to="/"
-              className="flex items-center gap-2"
-            >
-              <div className="flex size-9 items-center justify-center rounded-full bg-foreground text-background">
-                <Compass className="size-4" />
-              </div>
-
-              <span className="font-bold">
-                Vitala
-              </span>
-            </Link>
-          </div>
-
-          {/* BACK ARROW */}
           <Link
             to="/"
             aria-label="Back to Home"
@@ -100,7 +87,6 @@ function AuthLayout() {
             <ArrowLeft className="size-5" />
           </Link>
 
-          {/* FORM */}
           <div className="w-full max-w-md pt-14 lg:pt-10">
             <Outlet />
           </div>

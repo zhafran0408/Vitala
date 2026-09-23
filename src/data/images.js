@@ -1,17 +1,17 @@
 export const images = {
-  hero: "/images/image1.jpg",
+  hero: "/image/image1.jpg",
 
-  about: "/images/image2.jpg",
+  about: "/image/image2.jpg",
 
-  mountain: "/images/image1.jpg",
+  mountain: "/image/image5.jpg",
 
-  forest: "/images/image2.jpg",
+  forest: "/image/image3.jpg",
 
-  camping: "/images/image4.jpg",
+  camping: "/image/image4.jpg",
 
-  ocean: "/images/image3.jpg",
+  ocean: "/image/image7.jpg",
 
-  adventure: "/images/image4.jpg",
+  adventure: "/image/image6.jpg",
 
-  faq: "/images/image1.jpg",
+  faq: "/image/image4.jpg",
 };

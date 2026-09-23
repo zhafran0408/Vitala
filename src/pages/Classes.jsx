@@ -1,273 +1,259 @@
-import {
-  ArrowDown,
-  ArrowRight,
-  Mountain,
-  Trees,
-  Waves,
-} from "lucide-react";
-
+import { ArrowRight, MapPin, Mountain, Trees, Waves } from "lucide-react";
 import { Link } from "react-router-dom";
 
 import Footer from "../components/Footer";
-import Navbar from "../components/Navbar";
+import { images } from "../data/images";
 
 function Classes() {
   const destinations = [
     {
-      number: "01",
       title: "Mountain Escape",
-      subtitle: "Reach higher.",
+      location: "West Java, Indonesia",
+      image: images.mountain,
       description:
-        "Leave the noise behind and discover the calm, challenge, and freedom of the mountains.",
+        "Higher trails, colder mornings, and landscapes that make the climb worth it.",
+    },
+    {
+      title: "Forest Trails",
+      location: "Central Java, Indonesia",
+      image: images.forest,
+      description:
+        "Quiet paths, deep green surroundings, and a slower way to explore.",
+    },
+    {
+      title: "Coastal Journey",
+      location: "East Java, Indonesia",
+      image: images.ocean,
+      description:
+        "Open skies, endless horizons, and places where the journey feels wide open.",
+    },
+  ];
+
+  const landscapes = [
+    {
+      title: "Mountains",
+      description: "For higher ground and longer trails.",
       icon: Mountain,
     },
     {
-      number: "02",
-      title: "Forest Trails",
-      subtitle: "Go deeper.",
-      description:
-        "Walk beneath the trees, slow down, and discover the beauty hidden beyond the familiar path.",
+      title: "Forests",
+      description: "For quiet paths and hidden places.",
       icon: Trees,
     },
     {
-      number: "03",
-      title: "Coastal Journey",
-      subtitle: "Follow the horizon.",
-      description:
-        "Find open skies, endless coastlines, and a different kind of freedom beside the sea.",
+      title: "Coastlines",
+      description: "For open skies and endless horizons.",
       icon: Waves,
     },
   ];
 
   return (
     <div className="min-h-screen overflow-x-hidden bg-background">
-      <Navbar />
+      {/* HERO */}
+      <section className="px-6 pb-16 pt-20 sm:px-10 sm:pb-20 sm:pt-24 lg:px-16 lg:pb-24 lg:pt-28">
+        <div className="mx-auto max-w-7xl">
+          <p className="text-xs font-semibold uppercase tracking-[0.3em] text-primary">
+            Destinations
+          </p>
 
-      {/* ================= HERO ================= */}
-      <section className="relative overflow-hidden border-b">
-        {/* Background shapes */}
-        <div className="pointer-events-none absolute inset-0">
-          <div className="absolute -left-40 top-10 size-[550px] rounded-full bg-primary/10 blur-3xl" />
-
-          <div className="absolute -right-40 bottom-0 size-[550px] rounded-full bg-muted blur-3xl" />
-
-          <div className="absolute left-1/2 top-0 h-full w-px bg-border/40" />
-        </div>
-
-        <div className="relative mx-auto flex min-h-[calc(100vh-72px)] max-w-7xl items-center px-6 py-24">
-          <div className="w-full">
-            <div className="flex items-center gap-3">
-              <span className="h-px w-12 bg-primary" />
-
-              <p className="text-xs font-semibold uppercase tracking-[0.3em] text-primary">
-                Destinations
-              </p>
-            </div>
-
-            <h1 className="mt-8 max-w-6xl text-7xl font-bold leading-[0.82] tracking-[-0.06em] sm:text-8xl md:text-9xl lg:text-[150px]">
-              Choose your
+          <div className="mt-6 grid gap-8 lg:grid-cols-[1.2fr_0.8fr] lg:items-end">
+            <h1 className="text-6xl font-semibold leading-[0.9] tracking-[-0.06em] sm:text-7xl lg:text-8xl">
+              Go somewhere
               <br />
-              <span className="text-muted-foreground/40">
-                next escape.
+              <span className="text-muted-foreground">
+                worth remembering.
               </span>
             </h1>
 
-            <div className="mt-12 flex flex-col gap-8 lg:flex-row lg:items-end lg:justify-between">
-              <p className="max-w-xl text-base leading-7 text-muted-foreground sm:text-lg">
-                From mountain peaks to quiet forests and endless coastlines,
-                discover a place that makes you want to keep moving.
+            <div className="max-w-md lg:ml-auto">
+              <p className="text-base leading-7 text-muted-foreground sm:text-lg">
+                Discover places beyond the familiar. Choose a landscape,
+                follow your curiosity, and see where it takes you.
               </p>
 
-              <div className="flex items-center gap-3 text-sm text-muted-foreground">
-                <span>Explore</span>
-
-                <ArrowDown className="size-4 animate-bounce" />
+              <div className="mt-7 flex items-center gap-3 text-xs font-semibold uppercase tracking-[0.25em] text-muted-foreground">
+                <span className="h-px w-10 bg-border" />
+                Explore below
               </div>
             </div>
           </div>
         </div>
-
-        
       </section>
 
-      {/* ================= INTRO ================= */}
-      <section className="mx-auto max-w-7xl px-6 py-28 sm:py-36">
-        <div className="grid gap-12 lg:grid-cols-[0.9fr_1.1fr] lg:items-end">
-          <div>
-            <div className="flex items-center gap-3">
-              <span className="h-px w-10 bg-primary" />
-
-              <p className="text-xs font-semibold uppercase tracking-[0.3em] text-primary">
-                Where will you go?
-              </p>
-            </div>
-
-            <h2 className="mt-6 text-5xl font-bold leading-[0.9] tracking-[-0.05em] sm:text-6xl lg:text-7xl">
-              Somewhere
-              <br />
-              <span className="text-muted-foreground/40">
-                worth remembering.
-              </span>
-            </h2>
-          </div>
-
-          <p className="max-w-2xl text-lg leading-8 text-muted-foreground">
-            Indonesia is full of places waiting to be explored. Choose a
-            landscape, follow your curiosity, and let the journey become part
-            of the destination.
-          </p>
-        </div>
-      </section>
-
-      {/* ================= DESTINATIONS ================= */}
-      <section className="mx-auto max-w-7xl px-6 pb-28 sm:pb-36">
-        <div className="space-y-5">
-          {destinations.map((destination, index) => {
-            const Icon = destination.icon;
-
-            return (
+      {/* HORIZONTAL DESTINATION GALLERY */}
+      <section className="border-y">
+        <div className="overflow-x-auto">
+          <div className="flex min-w-max gap-4 px-6 py-6 sm:px-10 lg:px-16">
+            {destinations.map((destination, index) => (
               <Link
                 key={destination.title}
                 to="/sign-in"
-                className={`group relative block overflow-hidden rounded-[2rem] border bg-background p-8 transition-all duration-500 hover:-translate-y-1 hover:bg-muted/30 sm:p-12 lg:p-16 ${
-                  index === 1
-                    ? "lg:ml-16"
-                    : index === 2
-                      ? "lg:mr-16"
-                      : ""
-                }`}
+                className="group relative block w-[78vw] max-w-[520px] overflow-hidden rounded-2xl sm:w-[55vw] lg:w-[38vw]"
               >
-                {/* Decorative number */}
-                <div className="pointer-events-none absolute -right-6 -top-12 text-[180px] font-bold leading-none tracking-[-0.08em] text-muted-foreground/[0.04] transition-transform duration-700 group-hover:translate-x-3">
-                  {destination.number}
+                <div className="aspect-[4/5] overflow-hidden">
+                  <img
+                    src={destination.image}
+                    alt={destination.title}
+                    className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
+                  />
                 </div>
 
-                <div className="relative z-10 grid gap-12 lg:grid-cols-[1fr_auto] lg:items-center">
-                  <div>
-                    <div className="flex items-center gap-4">
-                      <div className="flex size-14 items-center justify-center rounded-2xl border transition-all duration-500 group-hover:rotate-3 group-hover:bg-foreground group-hover:text-background">
-                        <Icon className="size-6" />
-                      </div>
+                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/10 to-transparent" />
 
-                      <span className="text-xs font-semibold tracking-[0.25em] text-muted-foreground">
-                        {destination.number}
-                      </span>
-                    </div>
-
-                    <p className="mt-10 text-xs font-semibold uppercase tracking-[0.3em] text-primary">
-                      {destination.title}
-                    </p>
-
-                    <h2 className="mt-3 text-5xl font-bold leading-[0.9] tracking-[-0.05em] sm:text-6xl lg:text-7xl">
-                      {destination.subtitle}
-                    </h2>
-
-                    <p className="mt-6 max-w-xl text-base leading-7 text-muted-foreground">
-                      {destination.description}
-                    </p>
+                <div className="absolute inset-x-0 bottom-0 p-6 text-white sm:p-8">
+                  <div className="mb-3 flex items-center gap-2 text-xs text-white/60">
+                    <MapPin className="size-3.5" />
+                    {destination.location}
                   </div>
 
-                  {/* Arrow */}
-                  <div className="flex items-center gap-4 text-sm font-semibold">
-                    Discover
+                  <div className="flex items-end justify-between gap-5">
+                    <div>
+                      <span className="mb-2 block text-xs font-semibold uppercase tracking-[0.25em] text-white/50">
+                        0{index + 1}
+                      </span>
 
-                    <span className="flex size-12 items-center justify-center rounded-full border transition-all duration-500 group-hover:bg-foreground group-hover:text-background">
+                      <h2 className="text-3xl font-semibold tracking-tight sm:text-4xl">
+                        {destination.title}
+                      </h2>
+                    </div>
+
+                    <span className="flex size-11 shrink-0 items-center justify-center rounded-full border border-white/30 bg-white/10 backdrop-blur-md transition-all duration-300 group-hover:bg-white group-hover:text-black">
                       <ArrowRight className="size-4 transition-transform duration-300 group-hover:translate-x-1" />
                     </span>
                   </div>
                 </div>
-
-                {/* Bottom line */}
-                <div className="relative z-10 mt-12 h-px w-full overflow-hidden bg-border">
-                  <div className="h-full w-0 bg-foreground transition-all duration-700 group-hover:w-full" />
-                </div>
               </Link>
-            );
-          })}
+            ))}
+          </div>
         </div>
       </section>
 
-      {/* ================= PHILOSOPHY ================= */}
-      <section className="border-y bg-muted/30">
-        <div className="mx-auto max-w-7xl px-6 py-28 sm:py-36">
-          <div className="grid gap-12 lg:grid-cols-2 lg:items-center">
+      {/* FEATURED DESTINATION */}
+      <section className="px-6 py-24 sm:px-10 sm:py-32 lg:px-16 lg:py-40">
+        <div className="mx-auto max-w-7xl">
+          <div className="mb-10 flex flex-col gap-5 sm:flex-row sm:items-end sm:justify-between">
             <div>
               <p className="text-xs font-semibold uppercase tracking-[0.3em] text-primary">
-                More than a destination
+                Featured destination
               </p>
 
-              <h2 className="mt-5 text-5xl font-bold leading-[0.9] tracking-[-0.05em] sm:text-6xl lg:text-7xl">
-                Don't just
+              <h2 className="mt-4 text-4xl font-semibold tracking-tight sm:text-5xl">
+                Mountain Escape
+              </h2>
+            </div>
+
+            <p className="max-w-sm text-sm leading-7 text-muted-foreground">
+              For the days when the best direction is simply up.
+            </p>
+          </div>
+
+          <div className="group relative overflow-hidden rounded-2xl">
+            <div className="aspect-[16/9] overflow-hidden sm:aspect-[2/1]">
+              <img
+                src={images.mountain}
+                alt="Mountain landscape"
+                className="h-full w-full object-cover transition-transform duration-1000 group-hover:scale-105"
+              />
+            </div>
+
+            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/10 to-transparent" />
+
+            <div className="absolute inset-x-0 bottom-0 flex flex-col gap-6 p-6 text-white sm:flex-row sm:items-end sm:justify-between sm:p-10 lg:p-12">
+              <div className="max-w-xl">
+                <div className="mb-3 flex items-center gap-2 text-xs text-white/60">
+                  <MapPin className="size-3.5" />
+                  West Java, Indonesia
+                </div>
+
+                <p className="text-base leading-7 text-white/70 sm:text-lg">
+                  Higher trails, open landscapes, and a little more distance
+                  from the everyday.
+                </p>
+              </div>
+
+              <Link
+                to="/sign-in"
+                className="group/link inline-flex w-fit shrink-0 items-center gap-3 rounded-full bg-white px-6 py-3 text-sm font-semibold text-black transition-transform duration-300 hover:-translate-y-1"
+              >
+                Explore
+                <ArrowRight className="size-4 transition-transform duration-300 group-hover/link:translate-x-1" />
+              </Link>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* LANDSCAPES */}
+      <section className="border-y bg-muted/30">
+        <div className="mx-auto max-w-7xl px-6 py-24 sm:px-10 sm:py-32 lg:px-16">
+          <div className="grid gap-12 lg:grid-cols-[0.7fr_1.3fr]">
+            <div>
+              <p className="text-xs font-semibold uppercase tracking-[0.3em] text-primary">
+                Choose your landscape
+              </p>
+
+              <h2 className="mt-5 text-5xl font-semibold leading-[0.95] tracking-[-0.05em] sm:text-6xl">
+                Where do you
                 <br />
-                <span className="text-muted-foreground/40">
-                  visit somewhere.
+                <span className="text-muted-foreground">
+                  want to go?
                 </span>
               </h2>
             </div>
 
-            <div>
-              <p className="text-lg leading-8 text-muted-foreground">
-                The mountains, forests, and coastlines are only the beginning.
-                What matters is how the place makes you feel, what you discover
-                along the way, and the memories you take home.
-              </p>
+            <div className="border-t">
+              {landscapes.map((landscape) => {
+                const Icon = landscape.icon;
 
-              <div className="mt-8 flex flex-wrap gap-3">
-                <span className="rounded-full border px-5 py-2.5 text-sm">
-                  Mountains
-                </span>
+                return (
+                  <Link
+                    key={landscape.title}
+                    to="/sign-in"
+                    className="group flex items-center gap-5 border-b py-7 transition-all duration-300 hover:px-3"
+                  >
+                    <div className="flex size-10 shrink-0 items-center justify-center rounded-full border">
+                      <Icon className="size-4" />
+                    </div>
 
-                <span className="rounded-full border px-5 py-2.5 text-sm">
-                  Forests
-                </span>
+                    <div className="flex-1">
+                      <h3 className="text-2xl font-semibold tracking-tight">
+                        {landscape.title}
+                      </h3>
 
-                <span className="rounded-full border px-5 py-2.5 text-sm">
-                  Coastlines
-                </span>
+                      <p className="mt-1 text-sm text-muted-foreground">
+                        {landscape.description}
+                      </p>
+                    </div>
 
-                <span className="rounded-full border px-5 py-2.5 text-sm">
-                  Wild places
-                </span>
-              </div>
+                    <ArrowRight className="size-5 text-muted-foreground transition-transform duration-300 group-hover:translate-x-2 group-hover:text-foreground" />
+                  </Link>
+                );
+              })}
             </div>
           </div>
         </div>
       </section>
 
-      {/* ================= FINAL CTA ================= */}
-      <section className="mx-auto max-w-7xl px-6 py-28 sm:py-36">
-        <div className="relative overflow-hidden rounded-[2.5rem] bg-foreground px-6 py-20 text-background sm:px-12 sm:py-28 lg:px-20">
-          <div className="relative z-10 max-w-3xl">
-            <p className="text-xs font-semibold uppercase tracking-[0.3em] opacity-50">
-              Your next escape
+      {/* FINAL CTA */}
+      <section className="px-6 py-24 sm:px-10 sm:py-32 lg:px-16 lg:py-36">
+        <div className="mx-auto flex max-w-7xl flex-col gap-7 border-t pt-10 sm:flex-row sm:items-end sm:justify-between">
+          <div>
+            <p className="text-xs font-semibold uppercase tracking-[0.3em] text-primary">
+              Your next destination
             </p>
 
-            <h2 className="mt-5 text-5xl font-bold leading-[0.92] tracking-[-0.04em] sm:text-6xl lg:text-7xl">
-              Somewhere out there,
-              <br />
-              <span className="opacity-40">
-                your story begins.
-              </span>
+            <h2 className="mt-4 max-w-2xl text-4xl font-semibold leading-tight tracking-tight sm:text-5xl lg:text-6xl">
+              The world is bigger than your routine.
             </h2>
-
-            <p className="mt-7 max-w-xl text-base leading-7 opacity-60 sm:text-lg">
-              Find a place that speaks to you and start planning your next
-              adventure.
-            </p>
-
-            <Link
-              to="/sign-up"
-              className="group mt-9 inline-flex items-center gap-3 rounded-full bg-background px-7 py-3.5 text-sm font-semibold text-foreground transition-all duration-300 hover:-translate-y-1"
-            >
-              Start Exploring
-
-              <ArrowRight className="size-4 transition-transform duration-300 group-hover:translate-x-1" />
-            </Link>
           </div>
 
-          <div className="absolute -right-20 -top-20 size-72 rounded-full border border-background/10 sm:size-96" />
-
-          <div className="absolute -bottom-40 right-20 size-96 rounded-full border border-background/10" />
+          <Link
+            to="/sign-up"
+            className="group inline-flex w-fit shrink-0 items-center gap-3 rounded-full bg-foreground px-6 py-3 text-sm font-semibold text-background transition-transform duration-300 hover:-translate-y-1"
+          >
+            Start exploring
+            <ArrowRight className="size-4 transition-transform duration-300 group-hover:translate-x-1" />
+          </Link>
         </div>
       </section>
 
