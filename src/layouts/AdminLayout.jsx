@@ -7,12 +7,12 @@ import { UsuAuthStore } from "../store/userStore";
 function AdminLayout() {
   const user = UsuAuthStore((state) => state.user);
 
-  // BELUM LOGIN
+  
   if (!user) {
     return <Navigate to="/sign-in" replace />;
   }
 
-  // USER BIASA TIDAK BOLEH MASUK ADMIN
+ 
   if (user.role !== "admin") {
     return <Navigate to="/user" replace />;
   }

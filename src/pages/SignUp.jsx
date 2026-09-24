@@ -1,10 +1,10 @@
-import { useState } from "react";
-import { ArrowRight, Compass } from "lucide-react";
+/** @format */
 
+import { useState } from "react";
+import { ArrowRight } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 
 import { Button } from "@/components/ui/button";
-
 import {
   Card,
   CardContent,
@@ -12,7 +12,6 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-
 import { Input } from "@/components/ui/input";
 
 import { UsuAuthStore } from "../store/userStore";
@@ -26,24 +25,14 @@ function SignUp() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] =
-    useState("");
-  const [role, setRole] = useState("user");
-
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState("");
 
   const handleSubmit = (e) => {
     e.preventDefault();
-
     setError("");
 
-    if (
-      !name ||
-      !email ||
-      !password ||
-      !confirmPassword ||
-      !role
-    ) {
+    if (!name || !email || !password || !confirmPassword) {
       setError("Semua data harus diisi.");
       return;
     }
@@ -53,12 +42,8 @@ function SignUp() {
       return;
     }
 
-    const success = register(
-      name,
-      email,
-      password,
-      role,
-    );
+    // Semua akun dari Sign Up otomatis menjadi user
+    const success = register(name, email, password, "user");
 
     if (success) {
       navigate("/sign-in");
@@ -68,46 +53,51 @@ function SignUp() {
   const displayError = error || storeError;
 
   return (
-    <div className="relative">
-      {/* Decorative background */}
+    <div className="relative w-full">
+      {/* Background glow */}
       <div className="pointer-events-none fixed inset-0 -z-10 overflow-hidden">
-        <div className="absolute -left-40 top-20 size-[400px] rounded-full bg-primary/10 blur-3xl" />
-
-        <div className="absolute -right-40 bottom-20 size-[400px] rounded-full bg-muted blur-3xl" />
+        <div className="absolute -left-40 top-10 size-[420px] rounded-full bg-primary/10 blur-[120px]" />
+        <div className="absolute -right-40 bottom-10 size-[420px] rounded-full bg-muted blur-[120px]" />
       </div>
 
-      {/* Card */}
-      <Card className="overflow-hidden rounded-[2rem] border shadow-sm">
-        <CardHeader className="px-7 pt-8 text-center sm:px-9 sm:pt-10">
-          <div className="mx-auto flex size-14 items-center justify-center rounded-2xl bg-foreground text-background shadow-sm">
-            <Compass className="size-6" />
+      <Card className="overflow-hidden rounded-[2rem] border border-border/50 bg-background/95 shadow-[0_30px_100px_-40px_rgba(0,0,0,0.35)] backdrop-blur-xl">
+        {/* Header */}
+        <CardHeader className="px-7 pb-7 pt-8 sm:px-10 sm:pt-10">
+          <div className="flex items-start justify-between gap-6">
+            <div className="max-w-md">
+              <p className="mb-3 text-[11px] font-semibold uppercase tracking-[0.3em] text-primary">
+                Join Vitala
+              </p>
+
+              <CardTitle className="text-3xl font-bold tracking-[-0.045em] sm:text-4xl">
+                Start your journey.
+              </CardTitle>
+
+              <CardDescription className="mt-3 max-w-sm text-sm leading-6 text-muted-foreground">
+                Create your account and discover places worth remembering.
+              </CardDescription>
+            </div>
+
+            {/* Logo */}
+            <div className="flex size-14 shrink-0 items-center justify-center rounded-2xl border border-border/60 bg-muted/30 p-2 sm:size-16">
+              <img
+                src="/image/vitala-logo2.png"
+                alt="Vitala"
+                className="size-full object-contain"
+              />
+            </div>
           </div>
 
-          <div className="mt-6">
-            <p className="mb-2 text-xs font-semibold uppercase tracking-[0.3em] text-primary">
-              Join Vitala
-            </p>
-
-            <CardTitle className="text-3xl font-bold tracking-tight">
-              Start your journey.
-            </CardTitle>
-
-            <CardDescription className="mt-2 text-sm leading-6">
-              Create your account and start exploring.
-            </CardDescription>
-          </div>
+          <div className="mt-7 h-px w-full bg-border/60" />
         </CardHeader>
 
-        <CardContent className="px-7 pb-8 sm:px-9 sm:pb-10">
-          <form
-            onSubmit={handleSubmit}
-            className="space-y-5"
-          >
+        <CardContent className="px-7 pb-8 sm:px-10 sm:pb-10">
+          <form onSubmit={handleSubmit} className="space-y-5">
             {/* Name */}
             <div className="space-y-2">
               <label
                 htmlFor="name"
-                className="text-sm font-medium"
+                className="text-xs font-semibold uppercase tracking-[0.16em] text-muted-foreground"
               >
                 Name
               </label>
@@ -121,7 +111,7 @@ function SignUp() {
                   setName(e.target.value);
                   setError("");
                 }}
-                className="h-11 rounded-xl"
+                className="h-12 rounded-xl border-border/70 bg-muted/20 px-4 transition-all duration-300 placeholder:text-muted-foreground/40 hover:border-border focus:bg-background"
               />
             </div>
 
@@ -129,7 +119,7 @@ function SignUp() {
             <div className="space-y-2">
               <label
                 htmlFor="email"
-                className="text-sm font-medium"
+                className="text-xs font-semibold uppercase tracking-[0.16em] text-muted-foreground"
               >
                 Email
               </label>
@@ -143,93 +133,71 @@ function SignUp() {
                   setEmail(e.target.value);
                   setError("");
                 }}
-                className="h-11 rounded-xl"
+                className="h-12 rounded-xl border-border/70 bg-muted/20 px-4 transition-all duration-300 placeholder:text-muted-foreground/40 hover:border-border focus:bg-background"
               />
-            </div>
-
-            {/* Role */}
-            <div className="space-y-2">
-              <label
-                htmlFor="role"
-                className="text-sm font-medium"
-              >
-                Role
-              </label>
-
-              <select
-                id="role"
-                value={role}
-                onChange={(e) => {
-                  setRole(e.target.value);
-                  setError("");
-                }}
-                className="flex h-11 w-full rounded-xl border border-input bg-background px-3 text-sm outline-none transition-colors focus:ring-2 focus:ring-ring"
-              >
-                <option value="user">
-                  User
-                </option>
-
-                <option value="admin">
-                  Admin
-                </option>
-              </select>
             </div>
 
             {/* Password */}
-            <div className="space-y-2">
-              <label
-                htmlFor="password"
-                className="text-sm font-medium"
-              >
-                Password
-              </label>
+            <div className="grid gap-5 sm:grid-cols-2">
+              <div className="space-y-2">
+                <label
+                  htmlFor="password"
+                  className="text-xs font-semibold uppercase tracking-[0.16em] text-muted-foreground"
+                >
+                  Password
+                </label>
 
-              <Input
-                id="password"
-                type="password"
-                placeholder="••••••••"
-                value={password}
-                onChange={(e) => {
-                  setPassword(e.target.value);
-                  setError("");
-                }}
-                className="h-11 rounded-xl"
-              />
-            </div>
+                <Input
+                  id="password"
+                  type="password"
+                  placeholder="••••••••"
+                  value={password}
+                  onChange={(e) => {
+                    setPassword(e.target.value);
+                    setError("");
+                  }}
+                  className="h-12 rounded-xl border-border/70 bg-muted/20 px-4 transition-all duration-300 placeholder:text-muted-foreground/40 hover:border-border focus:bg-background"
+                />
+              </div>
 
-            {/* Confirm Password */}
-            <div className="space-y-2">
-              <label
-                htmlFor="confirm-password"
-                className="text-sm font-medium"
-              >
-                Confirm Password
-              </label>
+              {/* Confirm Password */}
+              <div className="space-y-2">
+                <label
+                  htmlFor="confirm-password"
+                  className="text-xs font-semibold uppercase tracking-[0.16em] text-muted-foreground"
+                >
+                  Confirm
+                </label>
 
-              <Input
-                id="confirm-password"
-                type="password"
-                placeholder="••••••••"
-                value={confirmPassword}
-                onChange={(e) => {
-                  setConfirmPassword(e.target.value);
-                  setError("");
-                }}
-                className="h-11 rounded-xl"
-              />
+                <Input
+                  id="confirm-password"
+                  type="password"
+                  placeholder="••••••••"
+                  value={confirmPassword}
+                  onChange={(e) => {
+                    setConfirmPassword(e.target.value);
+                    setError("");
+                  }}
+                  className="h-12 rounded-xl border-border/70 bg-muted/20 px-4 transition-all duration-300 placeholder:text-muted-foreground/40 hover:border-border focus:bg-background"
+                />
+              </div>
             </div>
 
             {/* Error */}
             {displayError && (
-              <p className="text-sm text-red-500">
-                {displayError}
-              </p>
+              <div className="flex items-center gap-3 rounded-xl border border-red-500/20 bg-red-500/5 px-4 py-3">
+                <div className="flex size-7 shrink-0 items-center justify-center rounded-full bg-red-500/10">
+                  <span className="text-xs font-bold text-red-500">!</span>
+                </div>
+
+                <p className="text-sm text-red-500">{displayError}</p>
+              </div>
             )}
 
-            {/* Button */}
+            {/* Submit */}
             <Button
               type="submit"
-              className="group h-11 w-full rounded-xl"
+              className="group mt-2 h-12 w-full rounded-xl text-sm font-semibold shadow-lg shadow-primary/10 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-xl"
             >
               Create Account
 
@@ -237,33 +205,30 @@ function SignUp() {
             </Button>
           </form>
 
-          <div className="my-7 flex items-center gap-4">
-            <div className="h-px flex-1 bg-border" />
-
-            <span className="text-xs text-muted-foreground">
-              OR
-            </span>
-
-            <div className="h-px flex-1 bg-border" />
+          {/* Login */}
+          <div className="mt-7 border-t border-border/60 pt-6">
+            <p className="text-center text-sm text-muted-foreground">
+              Already have an account?{" "}
+              <Link
+                to="/sign-in"
+                className="font-semibold text-foreground transition-colors duration-200 hover:text-primary"
+              >
+                Sign in
+              </Link>
+            </p>
           </div>
-
-          <p className="text-center text-sm text-muted-foreground">
-            Already have an account?{" "}
-            <Link
-              to="/sign-in"
-              className="font-semibold text-foreground transition-colors hover:text-primary"
-            >
-              Sign in
-            </Link>
-          </p>
         </CardContent>
       </Card>
 
-      <p className="mt-8 text-center text-xs text-muted-foreground">
-        Explore more. Live more.
-      </p>
+      {/* Bottom text */}
+      <div className="mt-6 flex items-center justify-center gap-3 text-[10px] font-medium uppercase tracking-[0.25em] text-muted-foreground/50">
+        <span className="h-px w-8 bg-border" />
+        Explore more
+        <span className="h-px w-8 bg-border" />
+      </div>
     </div>
   );
 }
 
 export default SignUp;
+

@@ -15,6 +15,7 @@ import SignIn from "./pages/SignIn";
 import SignUp from "./pages/SignUp";
 
 import AdminHome from "./pages/admin/AdminHome";
+import AdminSettings from "./pages/admin/AdminSettings";
 
 function App() {
   return (
@@ -42,6 +43,7 @@ function App() {
 
         <Route element={<AdminLayout />}>
           <Route path="/admin" element={<AdminHome />} />
+          <Route path="/admin/settings" element={<AdminSettings />} />
         </Route>
 
         {/* ================= UNKNOWN ROUTE ================= */}

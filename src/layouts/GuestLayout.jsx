@@ -18,7 +18,6 @@ function GuestLayout() {
     return <Navigate to='/sign-in' replace />;
   }
 
-  // ADMIN TIDAK BOLEH MASUK AREA USER
   if (user?.role === "admin") {
     return <Navigate to='/admin' replace />;
   }
