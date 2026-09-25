@@ -1,3 +1,5 @@
+/** @format */
+
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 
 import GuestLayout from "./layouts/GuestLayout";
@@ -16,39 +18,42 @@ import SignUp from "./pages/SignUp";
 
 import AdminHome from "./pages/admin/AdminHome";
 import AdminSettings from "./pages/admin/AdminSettings";
+import ScrollToTop from "./components/ScrollToTop";
 
 function App() {
   return (
     <BrowserRouter>
+      <ScrollToTop />
+
       <Routes>
         {/* ================= USER ================= */}
 
         <Route element={<GuestLayout />}>
-          <Route path="/" element={<Home />} />
-          <Route path="/about" element={<About />} />
-          <Route path="/classes" element={<Classes />} />
-          <Route path="/benefits" element={<Benefits />} />
-          <Route path="/faq" element={<FAQ />} />
-          <Route path="/profile" element={<Profile />} />
+          <Route path='/' element={<Home />} />
+          <Route path='/about' element={<About />} />
+          <Route path='/classes' element={<Classes />} />
+          <Route path='/benefits' element={<Benefits />} />
+          <Route path='/faq' element={<FAQ />} />
+          <Route path='/profile' element={<Profile />} />
         </Route>
 
         {/* ================= AUTH ================= */}
 
         <Route element={<AuthLayout />}>
-          <Route path="/sign-in" element={<SignIn />} />
-          <Route path="/sign-up" element={<SignUp />} />
+          <Route path='/sign-in' element={<SignIn />} />
+          <Route path='/sign-up' element={<SignUp />} />
         </Route>
 
         {/* ================= ADMIN ================= */}
 
         <Route element={<AdminLayout />}>
-          <Route path="/admin" element={<AdminHome />} />
-          <Route path="/admin/settings" element={<AdminSettings />} />
+          <Route path='/admin' element={<AdminHome />} />
+          <Route path='/admin/settings' element={<AdminSettings />} />
         </Route>
 
         {/* ================= UNKNOWN ROUTE ================= */}
 
-        <Route path="*" element={<Navigate to="/" replace />} />
+        <Route path='*' element={<Navigate to='/' replace />} />
       </Routes>
     </BrowserRouter>
   );
