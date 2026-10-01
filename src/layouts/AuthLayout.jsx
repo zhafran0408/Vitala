@@ -20,8 +20,8 @@ function AuthLayout() {
   const isSignUp = location.pathname === "/sign-up";
 
   const image = isSignUp
-    ? "/image/image7.jpg"
-    : "/image/image6.jpg";
+    ? "/image/image5.jpg"
+    : "/image/image1.jpg";
 
   const title = isSignUp
     ? "Start your journey."

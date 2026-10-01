@@ -1,5 +1,8 @@
+/** @format */
+
 import { ArrowRight, LogOut, Mail, User, UserRound } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
+import { useForm } from "react-hook-form";
 
 import { UsuAuthStore } from "../store/userStore";
 
@@ -9,9 +12,25 @@ function Profile() {
   const user = UsuAuthStore((state) => state.user);
   const logout = UsuAuthStore((state) => state.logout);
 
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isValid },
+  } = useForm({
+    mode: "onChange",
+    defaultValues: {
+      name: user?.name || "",
+      email: user?.email || "",
+    },
+  });
+
   const handleLogout = () => {
     logout();
     navigate("/");
+  };
+
+  const onSubmit = (data) => {
+    console.log("Profile data:", data);
   };
 
   if (!user) {
@@ -40,6 +59,7 @@ function Profile() {
               className="group mt-8 inline-flex items-center gap-3 rounded-full bg-foreground px-6 py-3 text-sm font-semibold text-background transition-transform duration-300 hover:-translate-y-1"
             >
               Sign in
+
               <ArrowRight className="size-4 transition-transform duration-300 group-hover:translate-x-1" />
             </Link>
           </div>
@@ -93,40 +113,82 @@ function Profile() {
             </p>
           </div>
 
-          {/* DETAILS */}
-          <div className="border-t">
+          {/* DETAILS FORM */}
+          <form
+            onSubmit={handleSubmit(onSubmit)}
+            className="border-t"
+          >
+            {/* Name */}
             <div className="flex items-center gap-5 border-b py-7">
               <div className="flex size-10 shrink-0 items-center justify-center rounded-full border">
                 <UserRound className="size-4" />
               </div>
 
               <div className="flex-1">
-                <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground">
+                <label
+                  htmlFor="name"
+                  className="text-xs uppercase tracking-[0.2em] text-muted-foreground"
+                >
                   Name
-                </p>
+                </label>
 
-                <p className="mt-1 text-lg font-semibold">
-                  {user.name}
-                </p>
+                <input
+                  id="name"
+                  type="text"
+                  {...register("name", {
+                    required: "Name wajib diisi",
+                    minLength: {
+                      value: 3,
+                      message: "Name minimal 3 karakter",
+                    },
+                  })}
+                  className="mt-2 w-full border-0 bg-transparent p-0 text-lg font-semibold outline-none focus:ring-0"
+                />
+
+                {errors.name && (
+                  <p className="mt-2 text-xs text-red-500">
+                    {errors.name.message}
+                  </p>
+                )}
               </div>
             </div>
 
+            {/* Email */}
             <div className="flex items-center gap-5 border-b py-7">
               <div className="flex size-10 shrink-0 items-center justify-center rounded-full border">
                 <Mail className="size-4" />
               </div>
 
-              <div className="flex-1 min-w-0">
-                <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground">
+              <div className="min-w-0 flex-1">
+                <label
+                  htmlFor="email"
+                  className="text-xs uppercase tracking-[0.2em] text-muted-foreground"
+                >
                   Email
-                </p>
+                </label>
 
-                <p className="mt-1 truncate text-lg font-semibold">
-                  {user.email}
-                </p>
+                <input
+                  id="email"
+                  type="email"
+                  {...register("email", {
+                    required: "Email wajib diisi",
+                    pattern: {
+                      value: /^\S+@\S+\.\S+$/,
+                      message: "Format email tidak valid",
+                    },
+                  })}
+                  className="mt-2 w-full border-0 bg-transparent p-0 text-lg font-semibold outline-none focus:ring-0"
+                />
+
+                {errors.email && (
+                  <p className="mt-2 text-xs text-red-500">
+                    {errors.email.message}
+                  </p>
+                )}
               </div>
             </div>
 
+            {/* Role */}
             <div className="flex items-center gap-5 border-b py-7">
               <div className="flex size-10 shrink-0 items-center justify-center rounded-full border">
                 <User className="size-4" />
@@ -142,7 +204,18 @@ function Profile() {
                 </p>
               </div>
             </div>
-          </div>
+
+            {/* Save Button */}
+            <div className="flex justify-end pt-6">
+              <button
+                type="submit"
+                disabled={!isValid}
+                className="rounded-full bg-foreground px-6 py-3 text-sm font-semibold text-background transition-all hover:-translate-y-1 disabled:cursor-not-allowed disabled:opacity-40"
+              >
+                Save changes
+              </button>
+            </div>
+          </form>
         </div>
       </section>
 
@@ -169,6 +242,7 @@ function Profile() {
               className="group inline-flex w-fit shrink-0 items-center gap-3 rounded-full bg-foreground px-6 py-3 text-sm font-semibold text-background transition-transform duration-300 hover:-translate-y-1"
             >
               Explore destinations
+
               <ArrowRight className="size-4 transition-transform duration-300 group-hover:translate-x-1" />
             </Link>
           </div>
@@ -183,6 +257,7 @@ function Profile() {
           className="group inline-flex items-center gap-3 text-sm font-semibold text-muted-foreground transition-colors hover:text-foreground"
         >
           <LogOut className="size-4 transition-transform duration-300 group-hover:-translate-x-1" />
+
           Sign out
         </button>
       </section>
