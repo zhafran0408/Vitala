@@ -8,8 +8,8 @@ import AdminLayout from "./layouts/AdminLayout";
 
 import Home from "./pages/Home";
 import About from "./pages/About";
-import Classes from "./pages/Classes";
-import Benefits from "./pages/Benefits";
+import Trips from "./pages/Trips";
+import Shop from "./pages/Shop";
 import FAQ from "./pages/FAQ";
 import Profile from "./pages/Profile";
 
@@ -31,8 +31,8 @@ function App() {
         <Route element={<GuestLayout />}>
           <Route path='/' element={<Home />} />
           <Route path='/about' element={<About />} />
-          <Route path='/classes' element={<Classes />} />
-          <Route path='/benefits' element={<Benefits />} />
+          <Route path='/trips' element={<Trips />} />
+          <Route path='/shop' element={<Shop />} />
           <Route path='/faq' element={<FAQ />} />
           <Route path='/profile' element={<Profile />} />
         </Route>
