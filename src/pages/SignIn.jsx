@@ -1,270 +1,102 @@
 /** @format */
 
-import { ArrowRight } from "lucide-react";
-import { Link, useNavigate } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useState } from "react";
+import { useNavigate, Link } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-
-import { Button } from "@/components/ui/button";
-
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-
-import { Input } from "@/components/ui/input";
+import { z } from "zod";
+import { toast } from "sonner";
 import { UsuAuthStore } from "../store/userStore";
-import { signinSchema } from "@/schemas/signinSchema";
+import { motion } from "framer-motion";
+import { Mail, Lock, Eye, EyeOff } from "lucide-react";
 
-function SignIn() {
+const signInSchema = z.object({
+  email: z.string().email("Format email tidak valid"),
+  password: z.string().min(6, "Password minimal 6 karakter"),
+});
+
+export default function SignIn() {
   const navigate = useNavigate();
-
   const login = UsuAuthStore((state) => state.login);
-  const error = UsuAuthStore((state) => state.error);
-
-  const [rememberMe, setRememberMe] = useState(() => {
-    return localStorage.getItem("rememberMe") === "true";
-  });
+  const [showPassword, setShowPassword] = useState(false);
 
   const {
     register,
     handleSubmit,
-    setValue,
-    formState: { errors, isValid },
+    formState: { errors, isSubmitting },
   } = useForm({
-    resolver: zodResolver(signinSchema),
-    mode: "onChange",
-    defaultValues: {
-      email: "",
-      password: "",
-    },
+    resolver: zodResolver(signInSchema),
   });
-
-  useEffect(() => {
-    const rememberedEmail = localStorage.getItem("rememberedEmail");
-
-    if (rememberedEmail) {
-      setValue("email", rememberedEmail, {
-        shouldValidate: true,
-      });
-    }
-  }, [setValue]);
 
   const onSubmit = (data) => {
     const success = login(data.email, data.password);
-
-    if (!success) return;
-
-    if (rememberMe) {
-      localStorage.setItem("rememberMe", "true");
-      localStorage.setItem("rememberedEmail", data.email);
+    if (success) {
+      toast.success("Berhasil masuk!");
+      const user = UsuAuthStore.getState().user;
+      if (user?.role === "admin") navigate("/admin");
+      else navigate("/");
     } else {
-      localStorage.removeItem("rememberMe");
-      localStorage.removeItem("rememberedEmail");
-    }
-
-    const user = UsuAuthStore.getState().user;
-
-    if (!user) return;
-
-    if (user.role === "admin") {
-      navigate("/admin");
-      return;
-    }
-
-    if (user.role === "user") {
-      navigate("/");
+      toast.error("Email atau password salah!");
     }
   };
 
   return (
-    <div className="relative w-full">
-      <div className="pointer-events-none fixed inset-0 -z-10 overflow-hidden">
-        <div className="absolute -left-40 top-10 size-[420px] rounded-full bg-primary/10 blur-[120px]" />
-        <div className="absolute -right-40 bottom-10 size-[420px] rounded-full bg-muted blur-[120px]" />
-      </div>
+    <div>
+      <h1 className="mb-2 text-center text-3xl font-extrabold text-slate-900">Sign In</h1>
+      <p className="mb-8 text-center text-sm text-slate-500">Masuk untuk melanjutkan petualangan.</p>
 
-      <Card className="group relative overflow-hidden rounded-[2rem] border border-border/50 bg-background/95 shadow-[0_35px_100px_-40px_rgba(0,0,0,0.4)] backdrop-blur-xl">
-        <div className="absolute left-0 right-0 top-0 h-px bg-gradient-to-r from-transparent via-foreground/20 to-transparent" />
-
-        <CardHeader className="relative px-7 pb-7 pt-8 sm:px-10 sm:pt-10">
-          <div className="mb-8 flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              <div className="flex size-20 items-center justify-center rounded-xl bg-foreground p-2.5 shadow-lg">
-                <img
-                  src="/image/vitala-logo-white.png"
-                  alt="Vitala"
-                  className="size-full object-contain"
-                />
-              </div>
-
-              <div>
-                <p className="text-sm font-bold tracking-tight">Vitala</p>
-                <p className="text-[10px] uppercase tracking-[0.18em] text-muted-foreground">
-                  Explore more
-                </p>
-              </div>
-            </div>
-
-            <div className="hidden h-8 w-px bg-border sm:block" />
+      <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
+        <div>
+          <label className="mb-1.5 block text-sm font-bold text-slate-700">Email</label>
+          <div className="relative">
+            <Mail className="absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-slate-400" />
+            <input
+              type="email"
+              {...register("email")}
+              placeholder="admin@test.com"
+              className="w-full rounded-xl border border-slate-300 py-3.5 pl-11 pr-4 text-sm font-medium focus:border-[#0B132B] focus:outline-none focus:ring-1 focus:ring-[#0B132B]"
+            />
           </div>
+          {errors.email && <p className="mt-1 text-xs text-red-500">{errors.email.message}</p>}
+        </div>
 
-          <div>
-            <p className="mb-3 text-[10px] font-bold uppercase tracking-[0.32em] text-primary">
-              Welcome back
-            </p>
-
-            <CardTitle className="text-4xl font-bold leading-[0.95] tracking-[-0.055em] sm:text-[2.8rem]">
-              Continue
-              <br />
-              your journey.
-            </CardTitle>
-
-            <CardDescription className="mt-5 max-w-sm text-sm leading-6 text-muted-foreground">
-              Sign in to keep exploring places worth remembering.
-            </CardDescription>
+        <div>
+          <div className="mb-1.5 flex items-center justify-between">
+            <label className="block text-sm font-bold text-slate-700">Password</label>
+            <a href="#" className="text-xs font-bold text-slate-400 hover:text-[#0B132B]">Lupa password?</a>
           </div>
-
-          <div className="mt-8 h-px w-full bg-border/60" />
-        </CardHeader>
-
-        <CardContent className="px-7 pb-8 sm:px-10 sm:pb-10">
-          <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
-            <div className="space-y-2.5">
-              <label
-                htmlFor="email"
-                className="text-[10px] font-bold uppercase tracking-[0.2em] text-muted-foreground"
-              >
-                Email address
-              </label>
-
-              <Input
-                id="email"
-                type="email"
-                placeholder="you@example.com"
-                autoComplete="email"
-                {...register("email")}
-                className="h-12 rounded-xl border-border/60 bg-muted/20 px-4 text-sm transition-all duration-300 placeholder:text-muted-foreground/35 hover:border-border focus:bg-background focus:ring-2 focus:ring-primary/10"
-              />
-
-              {errors.email && (
-                <p className="text-xs text-red-500">{errors.email.message}</p>
-              )}
-            </div>
-
-            <div className="space-y-2.5">
-              <div className="flex items-center justify-between">
-                <label
-                  htmlFor="password"
-                  className="text-[10px] font-bold uppercase tracking-[0.2em] text-muted-foreground"
-                >
-                  Password
-                </label>
-
-                <button
-                  type="button"
-                  className="text-[11px] font-medium text-muted-foreground transition-colors duration-200 hover:text-foreground"
-                >
-                  Forgot password?
-                </button>
-              </div>
-
-              <Input
-                id="password"
-                type="password"
-                placeholder="••••••••"
-                autoComplete="current-password"
-                {...register("password")}
-                className="h-12 rounded-xl border-border/60 bg-muted/20 px-4 text-sm transition-all duration-300 placeholder:text-muted-foreground/35 hover:border-border focus:bg-background focus:ring-2 focus:ring-primary/10"
-              />
-
-              {errors.password && (
-                <p className="text-xs text-red-500">
-                  {errors.password.message}
-                </p>
-              )}
-            </div>
-
-            <div className="flex items-center justify-between">
-              <label
-                htmlFor="remember-me"
-                className="group flex cursor-pointer items-center gap-2.5"
-              >
-                <input
-                  id="remember-me"
-                  type="checkbox"
-                  checked={rememberMe}
-                  onChange={(event) => {
-                    setRememberMe(event.target.checked);
-                  }}
-                  className="size-4 cursor-pointer rounded border-border accent-primary"
-                />
-
-                <span className="text-xs text-muted-foreground transition-colors group-hover:text-foreground">
-                  Remember me
-                </span>
-              </label>
-            </div>
-
-            {error && (
-              <div className="flex items-center gap-3 rounded-xl border border-red-500/20 bg-red-500/5 px-4 py-3">
-                <div className="flex size-7 shrink-0 items-center justify-center rounded-full bg-red-500/10">
-                  <span className="text-xs font-bold text-red-500">!</span>
-                </div>
-
-                <p className="text-sm text-red-500">{error}</p>
-              </div>
-            )}
-
-            <Button
-              type="submit"
-              disabled={!isValid}
-              className="group/button relative mt-2 h-12 w-full overflow-hidden rounded-xl text-sm font-semibold shadow-lg transition-all duration-300 hover:-translate-y-0.5 hover:shadow-xl disabled:cursor-not-allowed disabled:opacity-50"
+          <div className="relative">
+            <Lock className="absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-slate-400" />
+            <input
+              type={showPassword ? "text" : "password"}
+              {...register("password")}
+              placeholder="••••••••"
+              className="w-full rounded-xl border border-slate-300 py-3.5 pl-11 pr-12 text-sm font-medium focus:border-[#0B132B] focus:outline-none focus:ring-1 focus:ring-[#0B132B]"
+            />
+            <button
+              type="button"
+              onClick={() => setShowPassword(!showPassword)}
+              className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-800"
             >
-              <span className="relative z-10 flex items-center">
-                Sign In
-                <ArrowRight className="ml-2 size-4 transition-transform duration-300 group-hover/button:translate-x-1" />
-              </span>
-            </Button>
-          </form>
-
-          <div className="my-7 flex items-center gap-4">
-            <div className="h-px flex-1 bg-border/60" />
-
-            <span className="text-[9px] font-semibold uppercase tracking-[0.25em] text-muted-foreground/50">
-              Or
-            </span>
-
-            <div className="h-px flex-1 bg-border/60" />
+              {showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
+            </button>
           </div>
+          {errors.password && <p className="mt-1 text-xs text-red-500">{errors.password.message}</p>}
+        </div>
 
-          <div className="rounded-xl border border-border/50 bg-muted/20 px-4 py-3.5 text-center">
-            <p className="text-sm text-muted-foreground">
-              Don't have an account?{" "}
-              <Link
-                to="/sign-up"
-                className="font-semibold text-foreground transition-colors duration-200 hover:text-primary"
-              >
-                Create one
-              </Link>
-            </p>
-          </div>
-        </CardContent>
+        <motion.button
+          whileTap={{ scale: 0.98 }}
+          disabled={isSubmitting}
+          type="submit"
+          className="mt-6 w-full rounded-xl bg-[#0B132B] py-4 text-sm font-bold text-white transition-colors hover:bg-slate-800 disabled:opacity-70 shadow-lg shadow-[#0B132B]/20"
+        >
+          {isSubmitting ? "Memproses..." : "Sign In"}
+        </motion.button>
+      </form>
 
-        <div className="absolute bottom-0 left-10 right-10 h-px bg-gradient-to-r from-transparent via-border to-transparent" />
-      </Card>
-
-      <div className="mt-6 flex items-center justify-center gap-3 text-[9px] font-semibold uppercase tracking-[0.3em] text-muted-foreground/40">
-        <span className="h-px w-8 bg-border/70" />
-        Adventure is waiting
-        <span className="h-px w-8 bg-border/70" />
-      </div>
+      <p className="mt-8 text-center text-sm font-medium text-slate-600">
+        Belum punya akun? <Link to="/sign-up" className="font-bold text-blue-600 hover:underline">Daftar di sini</Link>
+      </p>
     </div>
   );
 }
-
-export default SignIn;

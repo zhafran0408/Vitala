@@ -1,23 +1,20 @@
 /** @format */
 
 import { useState } from "react";
-import {
-  ChevronDown,
-  LogOut,
-  Settings,
-  User,
-} from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
+import { ChevronDown, LogOut, Settings, User, Menu } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 
 import { UsuAuthStore } from "../store/userStore";
+import Sidebar from "./Sidebar";
 
 function Navbar() {
   const navigate = useNavigate();
-
   const user = UsuAuthStore((state) => state.user);
   const logout = UsuAuthStore((state) => state.logout);
-
+  
   const [open, setOpen] = useState(false);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
 
   const handleLogout = () => {
     logout();
@@ -26,128 +23,137 @@ function Navbar() {
   };
 
   const userName = user?.name || "User";
-
   const initial = userName.charAt(0).toUpperCase();
 
   return (
-    <header className="sticky top-0 z-40 border-b border-border/60 bg-background/90 backdrop-blur-xl">
-      <div className="flex h-16 items-center justify-between px-6">
-        {/* Logo */}
-        <Link
-          to="/"
-          className="group flex items-center gap-3"
-        >
-          <img
-            src="/image/vitala-logo2.png"
-            alt="Vitala"
-            className="size-9 object-contain transition-transform duration-300 group-hover:scale-105"
-          />
-
-          <span className="text-lg font-bold tracking-tight">
-            Vitala
-          </span>
-        </Link>
-
-        {/* Account */}
-        {user && (
-          <div className="relative">
+    <>
+      <motion.header
+        initial={{ y: -100, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        transition={{ type: "spring", stiffness: 200, damping: 20 }}
+        // MENGGUNAKAN FLOATING PILL DENGAN BACKGROUND GELAP TRANSPARAN
+        className="fixed left-1/2 top-6 z-50 w-[calc(100%-2rem)] max-w-6xl -translate-x-1/2 rounded-full border border-white/10 bg-[#0B132B]/90 px-4 py-3 shadow-2xl backdrop-blur-md sm:px-6 sm:py-4"
+      >
+        <div className="flex items-center justify-between">
+          
+          {/* KIRI: Hamburger (Mobile) + Logo */}
+          <div className="flex items-center gap-3">
             <button
-              type="button"
-              onClick={() => setOpen((value) => !value)}
-              className="group flex items-center gap-3 rounded-full border border-border/60 bg-background/70 py-1.5 pl-1.5 pr-3 transition-all duration-300 hover:border-border hover:bg-muted/50"
+              onClick={() => setSidebarOpen(true)}
+              className="flex items-center justify-center p-2 text-white md:hidden"
             >
-              {/* Avatar */}
-              <div className="flex size-9 items-center justify-center rounded-full bg-foreground text-sm font-semibold text-background">
-                {initial}
-              </div>
-
-              {/* Name */}
-              <div className="hidden text-left sm:block">
-                <p className="max-w-[120px] truncate text-sm font-semibold">
-                  {userName}
-                </p>
-
-                <p className="text-[10px] capitalize text-muted-foreground">
-                  {user.role}
-                </p>
-              </div>
-
-              <ChevronDown
-                className={`size-4 text-muted-foreground transition-transform duration-300 ${
-                  open ? "rotate-180" : ""
-                }`}
-              />
+              <Menu className="h-6 w-6" />
             </button>
 
-            {/* Dropdown */}
-            {open && (
+            <Link to="/" className="group flex items-center">
+              <img
+                src="/image/vitala-logo-white.png"
+                alt="Vitala"
+                className="h-8 sm:h-10 w-auto object-contain transition-transform duration-300 group-hover:scale-105"
+              />
+            </Link>
+          </div>
+
+          {/* TENGAH: Menu Desktop */}
+          <div className="hidden items-center gap-8 md:flex">
+            {[
+              { name: "Home", path: "/" },
+              { name: "Trips", path: "/trips" },
+              { name: "News", path: "/news" },
+              { name: "About", path: "/about" },
+              { name: "FAQ", path: "/faq" },
+            ].map((item) => (
+              <Link
+                key={item.name}
+                to={item.path}
+                className="text-xs font-semibold uppercase tracking-widest text-white/70 transition-colors hover:text-white"
+              >
+                {item.name}
+              </Link>
+            ))}
+          </div>
+
+          {/* KANAN: Akun / Login */}
+          <div className="relative">
+            {user ? (
               <>
-                {/* Overlay */}
                 <button
                   type="button"
-                  aria-label="Close account menu"
-                  onClick={() => setOpen(false)}
-                  className="fixed inset-0 z-[-1] cursor-default"
-                />
-
-                <div className="absolute right-0 top-[calc(100%+10px)] z-50 w-64 overflow-hidden rounded-2xl border border-border/60 bg-background/95 p-2 shadow-[0_20px_60px_-20px_rgba(0,0,0,0.3)] backdrop-blur-xl">
-                  {/* User info */}
-                  <div className="mb-2 rounded-xl bg-muted/40 px-3 py-3">
-                    <div className="flex items-center gap-3">
-                      <div className="flex size-10 shrink-0 items-center justify-center rounded-full bg-foreground text-sm font-semibold text-background">
-                        {initial}
-                      </div>
-
-                      <div className="min-w-0">
-                        <p className="truncate text-sm font-semibold">
-                          {userName}
-                        </p>
-
-                        <p className="truncate text-xs text-muted-foreground">
-                          {user.email}
-                        </p>
-                      </div>
+                  onClick={() => setOpen((v) => !v)}
+                  className="group flex items-center gap-3 rounded-full border border-white/20 bg-white/10 py-1.5 pl-1.5 pr-3 sm:pr-4 transition-all hover:border-white/40 hover:bg-white/20"
+                >
+                  {user.avatar ? (
+                    <img src={user.avatar} alt={userName} className="flex size-8 sm:size-9 items-center justify-center rounded-full object-cover border border-white/20 shadow-md" />
+                  ) : (
+                    <div className="flex size-8 sm:size-9 items-center justify-center rounded-full bg-white text-sm font-bold text-[#0B132B] shadow-md">
+                      {initial}
                     </div>
+                  )}
+                  
+                  <div className="hidden text-left sm:block">
+                    <p className="max-w-[120px] truncate text-sm font-bold text-white">
+                      {userName}
+                    </p>
                   </div>
+                  <ChevronDown className={`size-4 text-white/50 transition-transform duration-300 ${open ? "rotate-180" : ""}`} />
+                </button>
 
-                  {/* Menu */}
-                  <div className="space-y-1">
-                    <Link
-                      to="/profile"
-                      onClick={() => setOpen(false)}
-                      className="flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm text-muted-foreground transition-all duration-200 hover:bg-muted hover:text-foreground"
-                    >
-                      <User className="size-[18px]" />
-                      <span>Profile</span>
-                    </Link>
+                {/* DROPDOWN */}
+                <AnimatePresence>
+                  {open && (
+                    <>
+                      <div className="fixed inset-0 z-[-1]" onClick={() => setOpen(false)} />
+                      <motion.div
+                        initial={{ opacity: 0, y: 15, scale: 0.95 }}
+                        animate={{ opacity: 1, y: 0, scale: 1 }}
+                        exit={{ opacity: 0, y: 10, scale: 0.95 }}
+                        transition={{ duration: 0.2, ease: "easeOut" }}
+                        className="absolute right-0 top-[calc(100%+16px)] z-50 w-64 overflow-hidden rounded-2xl border border-white/10 bg-[#0B132B] p-2 shadow-2xl"
+                      >
+                        <div className="mb-2 rounded-xl bg-white/5 px-4 py-3">
+                          <p className="truncate text-sm font-bold text-white">{userName}</p>
+                          <p className="truncate text-xs text-white/50">{user.email}</p>
+                        </div>
 
-                    <Link
-                      to="/profile"
-                      onClick={() => setOpen(false)}
-                      className="flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm text-muted-foreground transition-all duration-200 hover:bg-muted hover:text-foreground"
-                    >
-                      <Settings className="size-[18px]" />
-                      <span>Pengaturan</span>
-                    </Link>
+                        <div className="space-y-1">
+                          <Link
+                            to="/settings"
+                            onClick={() => setOpen(false)}
+                            className="flex items-center gap-3 rounded-xl px-4 py-3 text-sm font-medium text-white/70 transition-colors hover:bg-white/10 hover:text-white"
+                          >
+                            <Settings className="size-4" />
+                            <span>Pengaturan</span>
+                          </Link>
 
-                    <div className="my-2 h-px bg-border/60" />
+                          <div className="my-1 h-px bg-white/10" />
 
-                    <button
-                      type="button"
-                      onClick={handleLogout}
-                      className="flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-sm text-red-500 transition-all duration-200 hover:bg-red-500/10"
-                    >
-                      <LogOut className="size-[18px]" />
-                      <span>Logout</span>
-                    </button>
-                  </div>
-                </div>
+                          <button
+                            onClick={handleLogout}
+                            className="flex w-full items-center gap-3 rounded-xl px-4 py-3 text-sm font-medium text-red-400 transition-colors hover:bg-red-500/10 hover:text-red-300"
+                          >
+                            <LogOut className="size-4" />
+                            <span>Keluar</span>
+                          </button>
+                        </div>
+                      </motion.div>
+                    </>
+                  )}
+                </AnimatePresence>
               </>
+            ) : (
+              <Link
+                to="/sign-in"
+                className="rounded-full bg-white px-4 py-2 sm:px-6 sm:py-2.5 text-[10px] sm:text-xs font-bold uppercase tracking-wider text-[#0B132B] transition-transform hover:scale-105 hover:bg-gray-200"
+              >
+                Sign In
+              </Link>
             )}
           </div>
-        )}
-      </div>
-    </header>
+        </div>
+      </motion.header>
+
+      <Sidebar open={sidebarOpen} onClose={() => setSidebarOpen(false)} />
+    </>
   );
 }
 
